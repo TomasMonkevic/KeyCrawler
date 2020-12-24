@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using KeyCrawler.WebApi.V1.Requests;
 
 namespace KeyCrawler.WebApi
 {
@@ -42,7 +45,11 @@ namespace KeyCrawler.WebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KeyCrawler.WebApi", Version = "v1" });
-            }); 
+            });
+
+            services.AddMvc().AddFluentValidation();
+
+            services.AddTransient<IValidator<SearchRequest>, SearchRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

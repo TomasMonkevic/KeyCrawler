@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KeyCrawler.Domain;
+using KeyCrawler.WebApi.V1.Requests;
 
 namespace KeyCrawler.WebApi.V1.Controllers
 {
@@ -25,8 +26,8 @@ namespace KeyCrawler.WebApi.V1.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpPost]
+        public IEnumerable<WeatherForecast> Search(SearchRequest searchRequest)
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
