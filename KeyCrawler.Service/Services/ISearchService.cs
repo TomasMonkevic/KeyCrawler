@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace KeyCrawler.Service.Services
 {
     public interface ISearchService
     {
-        void Search(IEnumerable<string> uris, IEnumerable<string> keywords);
+        Task Search(IEnumerable<string> uris, IEnumerable<string> keywords);
     }
 }
