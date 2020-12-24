@@ -6,20 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KeyCrawler.Domain;
 
-namespace KeyCrawler.WebApi.Controllers
+namespace KeyCrawler.WebApi.V1.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [ApiVersion("1.0")]
+    [Route("api/v{v:apiVersion}/[controller]")]
+    public class SearchesController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<SearchesController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public SearchesController(ILogger<SearchesController> logger)
         {
             _logger = logger;
         }

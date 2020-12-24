@@ -28,10 +28,21 @@ namespace KeyCrawler.WebApi
         {
 
             services.AddControllers();
+            services.AddApiVersioning(x =>  
+            {  
+                x.DefaultApiVersion = new ApiVersion(1, 0);  
+                x.AssumeDefaultVersionWhenUnspecified = true;  
+                x.ReportApiVersions = true;  
+            });
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            }); 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KeyCrawler.WebApi", Version = "v1" });
-            });
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +52,9 @@ namespace KeyCrawler.WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KeyCrawler.WebApi v1"));
+                app.UseSwaggerUI(c => {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "KeyCrawler.WebApi v1");
+                });
             }
 
             app.UseHttpsRedirection();
