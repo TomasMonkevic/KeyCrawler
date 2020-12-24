@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KeyCrawler.Domain\KeyCrawler.Domain.csproj" />
+    <ProjectReference Include="..\KeyCrawler.Service\KeyCrawler.Service.csproj" />
   </ItemGroup>
 
 </Project>

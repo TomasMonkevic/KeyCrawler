@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using KeyCrawler.WebApi.V1.Requests;
+using KeyCrawler.Service.Services;
 
 namespace KeyCrawler.WebApi
 {
@@ -48,6 +49,8 @@ namespace KeyCrawler.WebApi
             });
 
             services.AddMvc().AddFluentValidation();
+
+            services.AddScoped<ISearchService, SearchService>();
 
             services.AddTransient<IValidator<SearchRequest>, SearchRequestValidator>();
         }

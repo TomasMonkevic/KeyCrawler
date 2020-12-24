@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KeyCrawler.Domain;
 using KeyCrawler.WebApi.V1.Requests;
+using KeyCrawler.Service.Services;
 
 namespace KeyCrawler.WebApi.V1.Controllers
 {
@@ -14,29 +15,21 @@ namespace KeyCrawler.WebApi.V1.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     public class SearchesController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<SearchesController> _logger;
+        private readonly ISearchService _searchService;
 
-        public SearchesController(ILogger<SearchesController> logger)
+        public SearchesController(ISearchService searchService, ILogger<SearchesController> logger)
         {
+            _searchService = searchService;
             _logger = logger;
         }
 
         [HttpPost]
-        public IEnumerable<WeatherForecast> Search(SearchRequest searchRequest)
+        public IActionResult Search(SearchRequest searchRequest)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _searchService.Search(searchRequest.Uris, searchRequest.Keywords);
+            return Ok(); //TODO later return 201 and job id
         }
     }
 }
