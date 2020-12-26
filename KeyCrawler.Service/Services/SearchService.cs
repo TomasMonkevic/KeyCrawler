@@ -41,11 +41,9 @@ namespace KeyCrawler.Service.Services
         private IDictionary<string, int> GetKeywordsOccurances(IEnumerable<string> keywords, IEnumerable<HtmlDocument> pages)
         {
             var result = new Dictionary<string, int>();
-            _logger.LogError(pages.Count().ToString());
             foreach(var page in pages) 
             {
                 var pageText = ExtractPageText(page);
-                _logger.LogError(pageText);
                 foreach(var keyword in keywords) 
                 {
                     if(result.ContainsKey(keyword))
@@ -63,13 +61,15 @@ namespace KeyCrawler.Service.Services
 
         private string ExtractPageText(HtmlDocument page)
         {
-            return page.DocumentNode.SelectSingleNode("//body").InnerText;
+            var pattern = new Regex("[\t\r]");
+            var pageText = page.DocumentNode.SelectSingleNode("//body").InnerText;
+            return pattern.Replace(pageText, "");
         }
 
         private int GetOccurances(string text, string keyword)
         {
-            var escapedKeyword = Regex.Escape(keyword.ToLowerInvariant()); //user regex not keyword
-            return Regex.Matches(text.ToLowerInvariant(), escapedKeyword).Count;
+            var escapedKeyword = Regex.Escape(keyword); //user regex not keyword
+            return Regex.Matches(text, escapedKeyword, RegexOptions.IgnoreCase).Count;
         }
     }
 }
