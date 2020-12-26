@@ -1,22 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using KeyCrawler.Domain;
+using KeyCrawler.Persistence.Repositories;
+using KeyCrawler.Service.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace KeyCrawler.Service.Services
 {
     public class SearchService : ISearchService
     {
-        // private readonly ISearchResultsRepository _searchResultsRepo;
+        private readonly ISearchResultsRepository _searchResultsRepo;
+        private readonly IPageFetcher _pageFetcher;
         private readonly ILogger<SearchService> _logger;
-        private readonly HttpClient _httpClient = new HttpClient(); //TODO make singleton wrapper
 
-        public SearchService(ILogger<SearchService> logger) 
+        public SearchService(ISearchResultsRepository searchResultsRepo, IPageFetcher pageFetcher, ILogger<SearchService> logger) 
         {
+            _searchResultsRepo = searchResultsRepo;
+            _pageFetcher = pageFetcher;
             _logger = logger;
         }
 
@@ -24,81 +29,42 @@ namespace KeyCrawler.Service.Services
         {
             foreach(var uri in uris.Select(uri => new Uri(uri)).Distinct()) 
             {
-                var pages = await GetAllPages(uri);
-                //var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
-                // _searchResultsRepo.Add(new SearchResults {
-                //     Domain = domain,
-                //     KeywordsOccurances = keywordsOccurances
-                // });
+                var pages = await _pageFetcher.GetAllPages(uri);
+                var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
+                _searchResultsRepo.Add(new SearchResults {
+                    Uri = uri.AbsoluteUri,
+                    KeywordsOccurances = keywordsOccurances
+                });
             }
         }
 
-        private async Task<IEnumerable<HtmlDocument>> GetAllPages(Uri domain) //TODO move this to a separete class
-        {
-            var pages = new Queue<Uri>();
-            var visitedPages = new List<Uri>();
-
-            var depth = 0;
-            _logger.LogInformation($"MAIN PAGE {domain}");
-            pages.Enqueue(domain);
-            while(pages.Any()) //Add subpage limit
-            {
-                var page = pages.Dequeue();
-                visitedPages.Add(page);
-                //var html = await GetPageHtml();
-                //var subPagesUris = GetSubPagesUris(html);
-                var subPages = await GetSubPages(page);
-
-                foreach(var notVisitedPage in subPages.Except(visitedPages).Except(pages)) 
-                {
-                    _logger.LogWarning(notVisitedPage.AbsoluteUri);
-                    pages.Enqueue(notVisitedPage);
-                }
-
-                depth++;
-                _logger.LogInformation($"Depth {depth}");
-            }
-            _logger.LogInformation($"DONE FOR PAGE {domain}");
-            return null;
-        }
-
-        private async Task<IEnumerable<Uri>> GetSubPages(Uri page) {
-            ////////////////////
-            var response = await _httpClient.GetAsync(page);
-            if(!response.IsSuccessStatusCode) {
-                return new List<Uri>();
-            }
-            var content = await response.Content.ReadAsStringAsync();
-            var html = new HtmlDocument();
-            html.LoadHtml(content); //TODO also return this or move this to a separate method?
-            /////////////
-            var links = html.DocumentNode.SelectNodes("//a[@href]");
-            var subPages = links.Select(link => new Uri(page.Scheme + "://" + page.DnsSafeHost +"/" +link.Attributes["href"].Value)); //TODO make the slash conditional, also don't forget about link with full path and check the domain
-            return subPages;
-        }
-
-        private IDictionary<string, int> GetKeywordsOccurances(IEnumerable<string> keywords, IEnumerable<string> pages)
+        private IDictionary<string, int> GetKeywordsOccurances(IEnumerable<string> keywords, IEnumerable<HtmlDocument> pages)
         {
             var result = new Dictionary<string, int>();
+            _logger.LogError(pages.Count().ToString());
             foreach(var page in pages) 
             {
-                var pageText = ExtractPageText(page).ToLower();
+                var pageText = ExtractPageText(page);
+                _logger.LogError(pageText);
                 foreach(var keyword in keywords) 
                 {
-                    result[keyword] = GetOccurances(keyword, pageText);
+                    result[keyword] = GetOccurances(pageText, keyword);
                 }
             }
             return result;
         }
 
-        private string ExtractPageText(string page)
+        private string ExtractPageText(HtmlDocument page)
         {
-            throw new NotImplementedException();
+            return page.DocumentNode.SelectSingleNode("//body").InnerText;
         }
 
-        private int GetOccurances(string keyword, string text)
+        private int GetOccurances(string text, string keyword)
         {
-            throw new NotImplementedException();
+            byte[] bytes = Encoding.Default.GetBytes(text);
+            text = Encoding.UTF8.GetString(bytes);
+            var escapedKeyword = Regex.Escape(keyword.ToLower());
+            return Regex.Matches(text.ToLower(), escapedKeyword).Count;
         }
     }
 }

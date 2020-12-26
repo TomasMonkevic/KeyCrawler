@@ -15,6 +15,9 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using KeyCrawler.WebApi.V1.Requests;
 using KeyCrawler.Service.Services;
+using KeyCrawler.Service.Utils;
+using KeyCrawler.Persistence.Repositories;
+using System.Net.Http;
 
 namespace KeyCrawler.WebApi
 {
@@ -50,6 +53,10 @@ namespace KeyCrawler.WebApi
 
             services.AddMvc().AddFluentValidation();
 
+            services.AddSingleton<HttpClient>();
+
+            services.AddScoped<ISearchResultsRepository, SearchResultsRepository>();
+            services.AddScoped<IPageFetcher, PageFetcher>();
             services.AddScoped<ISearchService, SearchService>();
 
             services.AddTransient<IValidator<SearchRequest>, SearchRequestValidator>();

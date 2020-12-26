@@ -4,7 +4,7 @@ namespace KeyCrawler.Domain
 {
     public class SearchResults
     {
-        public string Domain { get; set; }
+        public string Uri { get; set; }
         public IDictionary<string, int> KeywordsOccurances { get; set; }
     }
 }
