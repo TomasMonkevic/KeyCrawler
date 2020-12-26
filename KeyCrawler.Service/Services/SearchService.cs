@@ -48,7 +48,14 @@ namespace KeyCrawler.Service.Services
                 _logger.LogError(pageText);
                 foreach(var keyword in keywords) 
                 {
-                    result[keyword] = GetOccurances(pageText, keyword);
+                    if(result.ContainsKey(keyword))
+                    {
+                        result[keyword] += GetOccurances(pageText, keyword);
+                    }
+                    else 
+                    {
+                        result[keyword] = GetOccurances(pageText, keyword);
+                    }
                 }
             }
             return result;
@@ -61,10 +68,8 @@ namespace KeyCrawler.Service.Services
 
         private int GetOccurances(string text, string keyword)
         {
-            byte[] bytes = Encoding.Default.GetBytes(text);
-            text = Encoding.UTF8.GetString(bytes);
-            var escapedKeyword = Regex.Escape(keyword.ToLower());
-            return Regex.Matches(text.ToLower(), escapedKeyword).Count;
+            var escapedKeyword = Regex.Escape(keyword.ToLowerInvariant()); //user regex not keyword
+            return Regex.Matches(text.ToLowerInvariant(), escapedKeyword).Count;
         }
     }
 }
