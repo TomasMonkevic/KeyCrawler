@@ -27,16 +27,24 @@ namespace KeyCrawler.WebApi.V1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(SearchRequest searchRequest)
+        public IActionResult CreateSearchJob(SearchRequest searchRequest)
         {
-            var jobId = BackgroundJob.Enqueue<ISearchService>(s => s.Search(searchRequest.Uris, searchRequest.Keywords, CancellationToken.None));
-            return Created($"api/v1/Search/{jobId}", jobId); //uri???
+            var searchJobId = BackgroundJob.Enqueue<ISearchService>(s => s.Search(searchRequest.Uris, searchRequest.Keywords, CancellationToken.None));
+            return CreatedAtAction("GetSearchJob", new { id = searchJobId }, searchJobId);
         }
 
-        [HttpDelete]
-        public IActionResult Cancel(string jobId)
+        [HttpGet("{id}")]
+        [ActionName("GetSearchJob")]
+        public IActionResult GetSearchJob([FromRoute] string id)
         {
-            var isSuccessful = BackgroundJob.Delete(jobId);
+            //TODO not implemented
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult CancelSearchJob([FromRoute] string id)
+        {
+            var isSuccessful = BackgroundJob.Delete(id);
             return isSuccessful ? NoContent() : Ok();
         }
     }
