@@ -29,6 +29,7 @@ namespace KeyCrawler.Service.Services
         {
             foreach(var uri in uris.Select(uri => new Uri(uri)).Distinct()) 
             {
+                //TODO later check if this uri was handled for these keywords
                 var pages = await _pageFetcher.GetAllPages(uri);
                 var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
                 _searchResultsRepo.Add(new SearchResults {
@@ -68,7 +69,7 @@ namespace KeyCrawler.Service.Services
 
         private int GetOccurances(string text, string keyword)
         {
-            var escapedKeyword = Regex.Escape(keyword); //user regex not keyword
+            var escapedKeyword = Regex.Escape(keyword); //user regex not keywords
             return Regex.Matches(text, escapedKeyword, RegexOptions.IgnoreCase).Count;
         }
     }

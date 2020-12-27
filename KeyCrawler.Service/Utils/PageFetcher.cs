@@ -42,7 +42,6 @@ namespace KeyCrawler.Service.Utils
 
                 foreach(var notVisitedPage in subPagesUris.Except(visitedUris).Except(uris)) 
                 {
-                    _logger.LogWarning(notVisitedPage.AbsoluteUri);
                     uris.Enqueue(notVisitedPage);
                 }
 

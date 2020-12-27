@@ -18,6 +18,8 @@ using KeyCrawler.Service.Services;
 using KeyCrawler.Service.Utils;
 using KeyCrawler.Persistence.Repositories;
 using System.Net.Http;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace KeyCrawler.WebApi
 {
@@ -51,6 +53,13 @@ namespace KeyCrawler.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "KeyCrawler.WebApi", Version = "v1" });
             });
 
+            services.AddHangfire(config => config
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UsePostgreSqlStorage(Configuration.GetConnectionString("Hangfire")));
+            services.AddHangfireServer();
+
             services.AddMvc().AddFluentValidation();
 
             services.AddSingleton<HttpClient>();
@@ -72,6 +81,7 @@ namespace KeyCrawler.WebApi
                 app.UseSwaggerUI(c => {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "KeyCrawler.WebApi v1");
                 });
+                app.UseHangfireDashboard();
             }
 
             app.UseHttpsRedirection();
@@ -83,6 +93,7 @@ namespace KeyCrawler.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using KeyCrawler.Domain;
 using KeyCrawler.WebApi.V1.Requests;
 using KeyCrawler.Service.Services;
+using Hangfire;
 
 namespace KeyCrawler.WebApi.V1.Controllers
 {
@@ -28,8 +29,8 @@ namespace KeyCrawler.WebApi.V1.Controllers
         [HttpPost]
         public IActionResult Search(SearchRequest searchRequest)
         {
-            _searchService.Search(searchRequest.Uris, searchRequest.Keywords);
-            return Ok(); //TODO later return 201 and job id
+            var jobId = BackgroundJob.Enqueue<ISearchService>(s => s.Search(searchRequest.Uris, searchRequest.Keywords)); //TODO add cancelation token to remove exception
+            return Created($"api/v1/Search/{jobId}", jobId); //uri???
         }
     }
 }
