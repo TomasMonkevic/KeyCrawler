@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KeyCrawler.Domain;
@@ -29,8 +29,15 @@ namespace KeyCrawler.WebApi.V1.Controllers
         [HttpPost]
         public IActionResult Search(SearchRequest searchRequest)
         {
-            var jobId = BackgroundJob.Enqueue<ISearchService>(s => s.Search(searchRequest.Uris, searchRequest.Keywords)); //TODO add cancelation token to remove exception
+            var jobId = BackgroundJob.Enqueue<ISearchService>(s => s.Search(searchRequest.Uris, searchRequest.Keywords, CancellationToken.None));
             return Created($"api/v1/Search/{jobId}", jobId); //uri???
+        }
+
+        [HttpDelete]
+        public IActionResult Cancel(string jobId)
+        {
+            var isSuccessful = BackgroundJob.Delete(jobId);
+            return isSuccessful ? NoContent() : Ok();
         }
     }
 }

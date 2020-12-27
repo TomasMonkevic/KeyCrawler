@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace KeyCrawler.Service.Utils
             _logger = logger;
         }
 
-        public async Task<IEnumerable<HtmlDocument>> GetAllPages(Uri domain)
+        public async Task<IEnumerable<HtmlDocument>> GetAllPages(Uri domain, CancellationToken cancellationToken)
         {
             var uris = new Queue<Uri>();
             var visitedUris = new List<Uri>();
@@ -32,7 +33,7 @@ namespace KeyCrawler.Service.Utils
             {
                 var uri = uris.Dequeue();
                 visitedUris.Add(uri);
-                var page = await GetPage(uri);
+                var page = await GetPage(uri, cancellationToken);
                 if(page == null)
                 {
                     continue;
@@ -60,9 +61,9 @@ namespace KeyCrawler.Service.Utils
             return subPages;
         }
 
-        public async Task<HtmlDocument> GetPage(Uri uri) 
+        public async Task<HtmlDocument> GetPage(Uri uri, CancellationToken cancellationToken) 
         {
-            var response = await _httpClient.GetAsync(uri);
+            var response = await _httpClient.GetAsync(uri, cancellationToken);
             if(!response.IsSuccessStatusCode) {
                 return null; //CONSIDER: Maybe better to use exception.
             }

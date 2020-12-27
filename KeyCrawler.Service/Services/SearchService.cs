@@ -9,6 +9,7 @@ using KeyCrawler.Domain;
 using KeyCrawler.Persistence.Repositories;
 using KeyCrawler.Service.Utils;
 using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace KeyCrawler.Service.Services
 {
@@ -25,12 +26,12 @@ namespace KeyCrawler.Service.Services
             _logger = logger;
         }
 
-        public async Task Search(IEnumerable<string> uris, IEnumerable<string> keywords)
+        public async Task Search(IEnumerable<string> uris, IEnumerable<string> keywords, CancellationToken cancellationToken)
         {
             foreach(var uri in uris.Select(uri => new Uri(uri)).Distinct()) 
             {
                 //TODO later check if this uri was handled for these keywords
-                var pages = await _pageFetcher.GetAllPages(uri);
+                var pages = await _pageFetcher.GetAllPages(uri, cancellationToken);
                 var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
                 _searchResultsRepo.Add(new SearchResults {
                     Uri = uri.AbsoluteUri,
