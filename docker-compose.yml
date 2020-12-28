@@ -7,10 +7,6 @@ services:
     build:
         context: .
         dockerfile: Dockerfile
-    ports: 
-        - 80:80
-    expose: 
-        - 80
     depends_on: 
         - hangfiredb
 
@@ -19,6 +15,4 @@ services:
     ports:
         - 5432:5432
     environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
         POSTGRES_DB: Hangfire

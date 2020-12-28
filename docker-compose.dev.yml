@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+
+  keycrawler:
+    ports:
+      - 5000:5000
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+
+  hangfiredb:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

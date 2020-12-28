@@ -23,6 +23,5 @@ RUN dotnet publish -c release -o /app --no-restore
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-EXPOSE 80
 COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "KeyCrawler.WebApi.dll"]
