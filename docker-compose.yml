@@ -2,8 +2,8 @@ version: '3.9'
 
 services:
 
-  keycrawler:
-    image: ${DOCKER_REGISTRY-}keycrawler
+  keycrawlerwebapi:
+    image: keycrawlerwebapi
     build:
       context: .
       dockerfile: Dockerfile
