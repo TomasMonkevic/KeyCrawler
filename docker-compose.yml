@@ -5,14 +5,16 @@ services:
   keycrawler:
     image: ${DOCKER_REGISTRY-}keycrawler
     build:
-        context: .
-        dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     depends_on: 
-        - hangfiredb
+      - hangfiredb
+    restart: on-failure
 
   hangfiredb:
-    image: postgres:latest
+    image: postgres
     ports:
-        - 5432:5432
+      - 5432:5432
     environment:
-        POSTGRES_DB: Hangfire
+      POSTGRES_DB: Hangfire
+    restart: always
