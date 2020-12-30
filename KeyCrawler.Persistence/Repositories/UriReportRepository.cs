@@ -4,16 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace KeyCrawler.Persistence.Repositories
 {
-    public class SearchResultsRepository : ISearchResultsRepository
+    public class UriReportRepository : IUriReportRepository
     {
-        private readonly ILogger<SearchResultsRepository> _logger;
+        private readonly ILogger<UriReportRepository> _logger;
 
-        public SearchResultsRepository(ILogger<SearchResultsRepository> logger)
+        public UriReportRepository(ILogger<UriReportRepository> logger)
         {
             _logger = logger;
         }
 
-        public void Add(SearchResults searchResults)
+        public void Add(UriReport searchResults)
         {
             _logger.LogInformation(searchResults.Uri);
             foreach(var pair in searchResults.KeywordsOccurances) 

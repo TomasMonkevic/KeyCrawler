@@ -15,13 +15,13 @@ namespace KeyCrawler.Service.Services
 {
     public class SearchService : ISearchService
     {
-        private readonly ISearchResultsRepository _searchResultsRepo;
+        private readonly IUriReportRepository _uriReportRepository;
         private readonly IPageFetcher _pageFetcher;
         private readonly ILogger<SearchService> _logger;
 
-        public SearchService(ISearchResultsRepository searchResultsRepo, IPageFetcher pageFetcher, ILogger<SearchService> logger) 
+        public SearchService(IUriReportRepository searchResultsRepo, IPageFetcher pageFetcher, ILogger<SearchService> logger) 
         {
-            _searchResultsRepo = searchResultsRepo;
+            _uriReportRepository = searchResultsRepo;
             _pageFetcher = pageFetcher;
             _logger = logger;
         }
@@ -33,7 +33,7 @@ namespace KeyCrawler.Service.Services
                 //TODO later check if this uri was handled for these keywords
                 var pages = await _pageFetcher.GetAllPages(uri, cancellationToken);
                 var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
-                _searchResultsRepo.Add(new SearchResults {
+                _uriReportRepository.Add(new UriReport {
                     Uri = uri.AbsoluteUri,
                     KeywordsOccurances = keywordsOccurances
                 });

@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - hangfiredb
+      - keycrawlerdb
     restart: on-failure
 
   hangfiredb:
@@ -17,4 +18,12 @@ services:
       - 5432:5432
     environment:
       POSTGRES_DB: Hangfire
+    restart: always
+
+  keycrawlerdb:
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: KeyCrawler
     restart: always

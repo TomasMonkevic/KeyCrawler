@@ -20,6 +20,7 @@ using KeyCrawler.Persistence.Repositories;
 using System.Net.Http;
 using Hangfire;
 using Hangfire.PostgreSql;
+using KeyCrawler.Persistence;
 
 namespace KeyCrawler.WebApi
 {
@@ -64,11 +65,13 @@ namespace KeyCrawler.WebApi
 
             services.AddSingleton<HttpClient>();
 
-            services.AddScoped<ISearchResultsRepository, SearchResultsRepository>();
+            services.AddScoped<IUriReportRepository, UriReportRepository>();
             services.AddScoped<IPageFetcher, PageFetcher>();
             services.AddScoped<ISearchService, SearchService>();
 
             services.AddTransient<IValidator<SearchRequest>, SearchRequestValidator>();
+
+            services.AddPersistanceLayer(Configuration.GetConnectionString("KeyCrawler"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
