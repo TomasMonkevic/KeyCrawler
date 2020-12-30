@@ -18,6 +18,10 @@ namespace KeyCrawler.Persistence
                                          .HasForeignKey(r => r.SearchId);
 
             modelBuilder.Entity<Search>().HasIndex(s => s.Id).IsUnique();
+
+            modelBuilder.Entity<UriReport>().HasMany(r => r.Matches)
+                                            .WithOne(m => m.UriReport)
+                                            .HasForeignKey(m => m.UriReportId);
         }
     }
 }

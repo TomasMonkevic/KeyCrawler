@@ -35,7 +35,7 @@ namespace KeyCrawler.Service.Services
                 var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
                 _uriReportRepository.Add(new UriReport {
                     Uri = uri.AbsoluteUri,
-                    KeywordsOccurances = keywordsOccurances
+                    Matches = keywordsOccurances.Select(p => new Domain.Match { Keyword = p.Key, HitCount=p.Value })
                 });
             }
         }

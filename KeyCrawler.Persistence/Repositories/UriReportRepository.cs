@@ -16,9 +16,9 @@ namespace KeyCrawler.Persistence.Repositories
         public void Add(UriReport searchResults)
         {
             _logger.LogInformation(searchResults.Uri);
-            foreach(var pair in searchResults.KeywordsOccurances) 
+            foreach(var match in searchResults.Matches) 
             {
-                _logger.LogInformation($"{pair.Key}: {pair.Value}");
+                _logger.LogInformation($"{match.Keyword}: {match.HitCount}");
             }
         }
     }
