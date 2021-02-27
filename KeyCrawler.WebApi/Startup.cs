@@ -21,6 +21,7 @@ using System.Net.Http;
 using Hangfire;
 using Hangfire.PostgreSql;
 using KeyCrawler.Persistence;
+using KeyCrawler.Persistence.Extentions;
 
 namespace KeyCrawler.WebApi
 {
@@ -98,6 +99,15 @@ namespace KeyCrawler.WebApi
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard();
             });
+
+            MigrateDb(app);
+        }
+
+        private void MigrateDb(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<KeyCrawlerContext>();
+            db.Migrate();
         }
     }
 }
