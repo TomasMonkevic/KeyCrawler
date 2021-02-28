@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using Hangfire;
+using KeyCrawler.Service.Services;
+using KeyCrawler.WebApi.V1.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using KeyCrawler.Domain;
-using KeyCrawler.WebApi.V1.Requests;
-using KeyCrawler.Service.Services;
-using Hangfire;
+using System.Threading;
 
 namespace KeyCrawler.WebApi.V1.Controllers
 {
@@ -16,7 +12,6 @@ namespace KeyCrawler.WebApi.V1.Controllers
     [Route("api/v{v:apiVersion}/[controller]")]
     public class SearchesController : ControllerBase
     {
-
         private readonly ILogger<SearchesController> _logger;
         private readonly ISearchService _searchService;
 

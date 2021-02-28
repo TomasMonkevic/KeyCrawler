@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using KeyCrawler.Domain;
 using KeyCrawler.Persistence.Repositories;
 using KeyCrawler.Service.Utils;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace KeyCrawler.Service.Services
 {
@@ -19,7 +18,7 @@ namespace KeyCrawler.Service.Services
         private readonly IPageFetcher _pageFetcher;
         private readonly ILogger<SearchService> _logger;
 
-        public SearchService(IUriReportRepository searchResultsRepo, IPageFetcher pageFetcher, ILogger<SearchService> logger) 
+        public SearchService(IUriReportRepository searchResultsRepo, IPageFetcher pageFetcher, ILogger<SearchService> logger)
         {
             _uriReportRepository = searchResultsRepo;
             _pageFetcher = pageFetcher;
@@ -28,14 +27,15 @@ namespace KeyCrawler.Service.Services
 
         public async Task Search(IEnumerable<string> uris, IEnumerable<string> keywords, CancellationToken cancellationToken)
         {
-            foreach(var uri in uris.Select(uri => new Uri(uri)).Distinct()) 
+            foreach (var uri in uris.Select(uri => new Uri(uri)).Distinct())
             {
                 //TODO later check if this uri was handled for these keywords
                 var pages = await _pageFetcher.GetAllPages(uri, cancellationToken);
                 var keywordsOccurances = GetKeywordsOccurances(keywords, pages);
-                _uriReportRepository.Add(new UriReport {
+                _uriReportRepository.Add(new UriReport
+                {
                     Uri = uri.AbsoluteUri,
-                    Matches = keywordsOccurances.Select(p => new Domain.Match { Keyword = p.Key, HitCount=p.Value }).ToList()
+                    Matches = keywordsOccurances.Select(p => new Domain.Match { Keyword = p.Key, HitCount = p.Value }).ToList()
                 });
             }
         }
@@ -43,16 +43,16 @@ namespace KeyCrawler.Service.Services
         private IDictionary<string, int> GetKeywordsOccurances(IEnumerable<string> keywords, IEnumerable<HtmlDocument> pages)
         {
             var result = new Dictionary<string, int>();
-            foreach(var page in pages) 
+            foreach (var page in pages)
             {
                 var pageText = ExtractPageText(page);
-                foreach(var keyword in keywords) 
+                foreach (var keyword in keywords)
                 {
-                    if(result.ContainsKey(keyword))
+                    if (result.ContainsKey(keyword))
                     {
                         result[keyword] += GetOccurances(pageText, keyword);
                     }
-                    else 
+                    else
                     {
                         result[keyword] = GetOccurances(pageText, keyword);
                     }

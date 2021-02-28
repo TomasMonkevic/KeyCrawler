@@ -9,7 +9,7 @@ namespace KeyCrawler.Persistence
         public DbSet<UriReport> UriReports { get; set; }
 
         public KeyCrawlerContext(DbContextOptions<KeyCrawlerContext> options)
-            : base(options) {}
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
