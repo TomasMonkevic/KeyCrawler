@@ -1,25 +1,20 @@
-using System;
 using KeyCrawler.Domain;
-using Microsoft.Extensions.Logging;
 
 namespace KeyCrawler.Persistence.Repositories
 {
     public class UriReportRepository : IUriReportRepository
     {
-        private readonly ILogger<UriReportRepository> _logger;
+        private readonly KeyCrawlerContext _db;
 
-        public UriReportRepository(ILogger<UriReportRepository> logger)
+        public UriReportRepository(KeyCrawlerContext databaseContext)
         {
-            _logger = logger;
+            _db = databaseContext;
         }
 
         public void Add(UriReport searchResults)
         {
-            _logger.LogInformation(searchResults.Uri);
-            foreach(var match in searchResults.Matches) 
-            {
-                _logger.LogInformation($"{match.Keyword}: {match.HitCount}");
-            }
+            _db.UriReports.Add(searchResults);
+            _db.SaveChanges();
         }
     }
 }
