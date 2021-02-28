@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KeyCrawler.Contracts
+﻿namespace KeyCrawler.Contracts
 {
     public class Class1
     {
