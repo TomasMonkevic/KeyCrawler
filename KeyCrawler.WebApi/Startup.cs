@@ -57,7 +57,7 @@ namespace KeyCrawler.WebApi
 
             services.AddMvc().AddFluentValidation();
 
-            services.AddSingleton<HttpClient>();
+            services.AddHttpClient<ISearchService>();
 
             services.AddScoped<IUriReportRepository, UriReportRepository>();
             services.AddScoped<IPageFetcher, PageFetcher>();
