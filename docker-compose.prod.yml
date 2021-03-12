@@ -5,11 +5,6 @@ services:
   keycrawlerwebapi:
     ports:
       - 80:80
-      - 443:443
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: https://+:443;http://+:80
-      ASPNETCORE_HTTPS_PORT: 443
-      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/keycrawler.pfx
-    volumes:
-      - ~/.aspnet/https:/https:ro

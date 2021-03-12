@@ -82,7 +82,7 @@ namespace KeyCrawler.WebApi
                 app.UseHangfireDashboard();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
