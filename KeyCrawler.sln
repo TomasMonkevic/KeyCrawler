@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyCrawler.Persistence", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyCrawler.Service", "KeyCrawler.Service\KeyCrawler.Service.csproj", "{7F876360-ED43-4734-B96A-11DB224A1426}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyCrawler.GrpcApi", "KeyCrawler.GrpcApi\KeyCrawler.GrpcApi.csproj", "{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{1E0E16CB-A63C-4922-9C5A-B40F5DE7CDAC}.Release|x64.Build.0 = Release|Any CPU
 		{1E0E16CB-A63C-4922-9C5A-B40F5DE7CDAC}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E0E16CB-A63C-4922-9C5A-B40F5DE7CDAC}.Release|x86.Build.0 = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|x64.Build.0 = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Debug|x86.Build.0 = Debug|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|x64.ActiveCfg = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|x64.Build.0 = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|x86.ActiveCfg = Release|Any CPU
+		{80F2B228-B2C9-4C0D-AE50-805C17A6FF92}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
