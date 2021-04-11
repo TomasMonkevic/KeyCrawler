@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+import { HelloRequest } from "./Protos/greet_pb"
+import { GreeterClient } from "./Protos/greet_grpc_web_pb"
+
+var client = new GreeterClient("http://localhost:6060");
 
 function App() {
+  const [greet, setGreet] = useState("NO GREET :(")
+
+  const getGreet = () => {
+    console.log("greet!");
+
+    var greetRequest = new HelloRequest();
+    var stream = client.sayHellos(greetRequest, {});
+
+    stream.on("data", (response) => setGreet(response.getValue()));
+  };
+
+  useEffect(() => getGreet(), []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      Greets: {greet}
     </div>
   );
 }
