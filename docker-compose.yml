@@ -19,11 +19,18 @@ services:
       dockerfile: Dockerfile.grpc
     restart: on-failure
 
+  keycrawler_frontend:
+    image: keycrawler_frontend
+    build:
+      context: ./KeyCrawler.Frontend/keycrawler/.
+      dockerfile: Dockerfile
+    restart: on-failure
+
   envoyproxy:
     image: envoyproxy
     build:
-      context: .
-      dockerfile: Envoy/Dockerfile
+      context: ./Envoy/.
+      dockerfile: Dockerfile
 
   hangfiredb:
     image: postgres
