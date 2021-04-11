@@ -6,10 +6,17 @@ services:
     image: keycrawlerwebapi
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.web
     depends_on: 
       - hangfiredb
       - keycrawlerdb
+    restart: on-failure
+
+  keycrawlergrpc:
+    image: keycrawlergrpc
+    build:
+      context: .
+      dockerfile: Dockerfile.grpc
     restart: on-failure
 
   hangfiredb:

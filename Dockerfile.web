@@ -4,6 +4,7 @@ WORKDIR /source
 
 # copy csproj and restore as distinct layers
 COPY *.sln .
+COPY KeyCrawler.GrpcApi/*.csproj ./KeyCrawler.GrpcApi/
 COPY KeyCrawler.WebApi/*.csproj ./KeyCrawler.WebApi/
 COPY KeyCrawler.Service/*.csproj ./KeyCrawler.Service/
 COPY KeyCrawler.Persistence/*.csproj ./KeyCrawler.Persistence/
@@ -18,7 +19,7 @@ COPY KeyCrawler.Persistence/. ./KeyCrawler.Persistence/
 COPY KeyCrawler.Domain/. ./KeyCrawler.Domain/
 COPY KeyCrawler.Contracts/. ./KeyCrawler.Contracts/
 WORKDIR /source
-RUN dotnet publish -c release -o /app --no-restore
+RUN dotnet publish ./KeyCrawler.WebApi/ -c release -o /app --no-restore
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0

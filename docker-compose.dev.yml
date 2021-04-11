@@ -9,6 +9,13 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5000
 
+  keycrawlergrpc:
+    ports:
+      - 6000:6000
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:6000
+
   hangfiredb:
     environment:
       POSTGRES_USER: postgres
