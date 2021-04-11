@@ -13,9 +13,10 @@ function App() {
     console.log("greet!");
 
     var greetRequest = new HelloRequest();
+    greetRequest.setName("Tomas");
     var stream = client.sayHellos(greetRequest, {});
 
-    stream.on("data", (response) => setGreet(response.getValue()));
+    stream.on("data", (response) => setGreet(response.getMessage()));
   };
 
   useEffect(() => getGreet(), []);

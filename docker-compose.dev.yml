@@ -20,6 +20,11 @@ services:
     ports:
       - 3000:3000
 
+  envoyproxy:
+    ports:
+      - 6060:6060
+      - 9901:9901
+
   hangfiredb:
     environment:
       POSTGRES_USER: postgres
