@@ -19,6 +19,12 @@ services:
       dockerfile: Dockerfile.grpc
     restart: on-failure
 
+  envoyproxy:
+    image: envoyproxy
+    build:
+      context: .
+      dockerfile: Envoy/Dockerfile
+
   hangfiredb:
     image: postgres
     ports:
